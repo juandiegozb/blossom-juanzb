@@ -21,6 +21,8 @@ services:
       POSTGRES_DB: blossom-db
     volumes:
       - db-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
     networks:
       - app-network
 
