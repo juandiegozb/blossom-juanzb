@@ -3,6 +3,7 @@
 namespace controllers;
 
 use Models\Transaction;
+use Utils\Paginator;
 
 
 class TransactionController {
@@ -18,7 +19,20 @@ class TransactionController {
         return ['status' => 201, 'data' => ['transactionID' => $id]];
     }
 
-    public function getAll() {
+    public function getAll($queryParams) {
+        $filters = [
+            'type' => $queryParams['type'] ?? null,
+            'startDate' => $queryParams['startDate'] ?? null,
+            'endDate' => $queryParams['endDate'] ?? null,
+        ];
 
+        $paginator = new Paginator($queryParams, $this->model->count($filters));
+        $data = $this->model->getAll($filters, $paginator->getLimit(), $paginator->getOffset());
+
+        return [
+            'status' => 200,
+            'data' => $data,
+            'pagination' => $paginator->getPaginationLinks(),
+        ];
     }
 }
