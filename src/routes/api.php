@@ -44,6 +44,13 @@ if ($requestUri === '/v1/transactions' && $requestMethod === 'GET') {
 }
 
 
+if ($requestUri === '/docs') {
+    header('Content-Type: application/json');
+    echo file_get_contents(__DIR__ . '/../swagger/swagger.json');
+    exit;
+}
+
+
 // Response for routes not found
 http_response_code(404);
 echo json_encode(['status' => 404, 'message' => 'This route has not been found in the blossom api for transactions.']);

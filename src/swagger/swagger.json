@@ -1,0 +1,74 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Financial Transaction API",
+    "description": "API for managing financial transactions."
+  },
+  "host": "localhost:8080",
+  "basePath": "/v1",
+  "schemes": ["http"],
+  "paths": {
+    "/transactions": {
+      "get": {
+        "summary": "Get all transactions",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "type": "integer",
+            "description": "Page number for pagination."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer",
+            "description": "Limit of items per page."
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "type": "string",
+            "description": "Filter by transaction type."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new transaction",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Transaction created successfully"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Transaction": {
+      "type": "object",
+      "properties": {
+        "accountNumberFrom": { "type": "string" },
+        "accountTypeFrom": { "type": "string" },
+        "accountNumberTo": { "type": "string" },
+        "accountTypeTo": { "type": "string" },
+        "amount": { "type": "number" },
+        "memo": { "type": "string" }
+      }
+    }
+  }
+}
