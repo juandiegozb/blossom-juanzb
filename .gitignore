@@ -1,1 +1,4 @@
 .idea
+src/vendor/
+src/composer.lock
+src/.phpunit.result.cache
