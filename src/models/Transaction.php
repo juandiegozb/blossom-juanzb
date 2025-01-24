@@ -17,7 +17,7 @@ class Transaction {
      * @return mixed
      * @author Juan Zambrano
      */
-    public function create($data): mixed
+    public function create($data)
     {
         $sql = "INSERT INTO transactions (accountNumberFrom, accountTypeFrom, accountNumberTo, accountTypeTo, amount, memo)
                 VALUES (:accountNumberFrom, :accountTypeFrom, :accountNumberTo, :accountTypeTo, :amount, :memo)";
@@ -34,7 +34,7 @@ class Transaction {
      * @param $offset
      * @return mixed
      */
-    public function getAll($filters, $limit, $offset): mixed
+    public function getAll($filters, $limit, $offset)
     {
         $sql = "SELECT * FROM transactions WHERE 1=1";
 
@@ -72,7 +72,7 @@ class Transaction {
      * @param $filters
      * @return mixed
      */
-    public function count($filters): mixed
+    public function count($filters)
     {
         $sql = "SELECT COUNT(*) as total FROM transactions WHERE 1=1";
 

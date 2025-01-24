@@ -4,6 +4,7 @@ namespace controllers;
 
 use Models\Transaction;
 use Utils\Paginator;
+use Utils\Validator;
 
 
 class TransactionController {
@@ -14,7 +15,21 @@ class TransactionController {
     }
 
     public function create($request) {
-        $data = $request;
+        error_log('Incoming request: ' . json_encode($request));
+
+        $validator = new Validator();
+
+        $data = $validator->validate($request, [
+            'accountNumberFrom' => 'required',
+            'accountTypeFrom' => 'required',
+            'accountNumberTo' => 'required',
+            'accountTypeTo' => 'required',
+            'amount' => 'required|numeric',
+            'memo' => 'required',
+        ]);
+
+        error_log('Validated data: ' . json_encode($data));
+
         $id = $this->model->create($data);
         return ['status' => 201, 'data' => ['transactionID' => $id]];
     }
