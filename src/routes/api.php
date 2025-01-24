@@ -6,6 +6,8 @@ require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../models/Transaction.php';
 require_once __DIR__ . '/../controllers/TransactionController.php';
 require_once __DIR__ . '/../utils/Paginator.php';
+require_once __DIR__ . '/../utils/Validator.php';
+
 
 // Create a database connection
 $dbConfig = require __DIR__ . '/../config/database.php';
@@ -22,6 +24,13 @@ $requestUri = explode('?', $_SERVER['REQUEST_URI'])[0];
 
 if ($requestUri === '/v1/transactions' && $requestMethod === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
+
+    if (is_null($data)) {
+        http_response_code(400);
+        echo json_encode(['status' => 400, 'message' => 'Invalid JSON format']);
+        exit;
+    }
+
     $response = $transactionController->create($data);
     echo json_encode($response);
     exit;
