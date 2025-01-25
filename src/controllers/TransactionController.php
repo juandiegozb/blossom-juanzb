@@ -44,6 +44,13 @@ class TransactionController {
         $paginator = new Paginator($queryParams, $this->model->count($filters));
         $data = $this->model->getAll($filters, $paginator->getLimit(), $paginator->getOffset());
 
+        if (empty($data)) {
+            return [
+                'status' => 404,
+                'message' => 'No transactions available for the specified filters.'
+            ];
+        }
+
         return [
             'status' => 200,
             'data' => $data,

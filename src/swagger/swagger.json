@@ -11,8 +11,29 @@
   "paths": {
     "/transactions": {
       "get": {
-        "summary": "Get all transactions",
+        "summary": "Retrieve all transactions",
+        "description": "Retrieve all transactions with optional filters for date range and type.",
         "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "type": "string",
+            "description": "Filter by transaction type ('debit' or 'credit')."
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "type": "string",
+            "format": "date",
+            "description": "Filter transactions created after this date."
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "type": "string",
+            "format": "date",
+            "description": "Filter transactions created before this date."
+          },
           {
             "name": "page",
             "in": "query",
@@ -23,23 +44,38 @@
             "name": "limit",
             "in": "query",
             "type": "integer",
-            "description": "Limit of items per page."
-          },
-          {
-            "name": "type",
-            "in": "query",
-            "type": "string",
-            "description": "Filter by transaction type."
+            "description": "Number of transactions per page."
           }
         ],
         "responses": {
           "200": {
-            "description": "Successful response"
+            "description": "Successful response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": { "$ref": "#/definitions/Transaction" }
+                },
+                "pagination": {
+                  "type": "object",
+                  "properties": {
+                    "current": { "type": "string" },
+                    "prev": { "type": "string" },
+                    "next": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No transactions available for the specified filters."
           }
         }
       },
       "post": {
         "summary": "Create a new transaction",
+        "description": "Create a new financial transaction. The type must be either 'debit' or 'credit'.",
         "parameters": [
           {
             "in": "body",
@@ -52,7 +88,25 @@
         ],
         "responses": {
           "201": {
-            "description": "Transaction created successfully"
+            "description": "Transaction created successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "transactionID": { "type": "integer" }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "object",
+                  "additionalProperties": { "type": "string" }
+                }
+              }
+            }
           }
         }
       }
@@ -66,9 +120,15 @@
         "accountTypeFrom": { "type": "string" },
         "accountNumberTo": { "type": "string" },
         "accountTypeTo": { "type": "string" },
+        "type": {
+          "type": "string",
+          "enum": ["debit", "credit"],
+          "description": "Transaction type ('debit' or 'credit')."
+        },
         "amount": { "type": "number" },
-        "memo": { "type": "string" }
-      }
+        "description": { "type": "string" }
+      },
+      "required": ["accountNumberFrom", "accountTypeFrom", "accountNumberTo", "accountTypeTo", "type", "amount", "description"]
     }
   }
 }

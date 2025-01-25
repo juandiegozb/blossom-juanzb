@@ -36,9 +36,25 @@ if ($requestUri === '/v1/transactions' && $requestMethod === 'POST') {
     exit;
 }
 
+if ($requestUri === '/v1/transactions' && $requestMethod === 'POST') {
+    $data = json_decode(file_get_contents('php://input'), true);
+
+    if (is_null($data)) {
+        http_response_code(400);
+        echo json_encode(['status' => 400, 'message' => 'Invalid JSON format']);
+        exit;
+    }
+
+    $response = $transactionController->create($data);
+    http_response_code($response['status']);
+    echo json_encode($response);
+    exit;
+}
+
 if ($requestUri === '/v1/transactions' && $requestMethod === 'GET') {
     $queryParams = $_GET;
     $response = $transactionController->getAll($queryParams);
+    http_response_code($response['status']);
     echo json_encode($response);
     exit;
 }
