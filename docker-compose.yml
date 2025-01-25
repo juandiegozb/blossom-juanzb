@@ -21,6 +21,7 @@ services:
       POSTGRES_DB: blossom-db
     volumes:
       - db-data:/var/lib/postgresql/data
+      - ./migration.sql:/docker-entrypoint-initdb.d/migration.sql
     ports:
       - 5432:5432
     networks:

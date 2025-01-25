@@ -16,6 +16,12 @@ class Validator
                 if ($r === 'numeric' && isset($data[$field]) && !is_numeric($data[$field])) {
                     $errors[$field][] = "$field must be a numeric value.";
                 }
+                if ($r === 'date' && isset($data[$field]) && !strtotime($data[$field])) {
+                    $errors[$field][] = "$field must be a valid date.";
+                }
+                if ($r === 'in:debit,credit' && isset($data[$field]) && !in_array($data[$field], ['debit', 'credit'])) {
+                    $errors[$field][] = "$field must be either 'debit' or 'credit'.";
+                }
             }
         }
 
